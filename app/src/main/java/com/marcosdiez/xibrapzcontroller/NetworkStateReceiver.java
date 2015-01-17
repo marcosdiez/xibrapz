@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.util.Log;
 
 /**
@@ -18,7 +17,7 @@ public class NetworkStateReceiver extends BroadcastReceiver {
         Globals.offline = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, Boolean.FALSE);
         if (Globals.offline) {
             Log.d(TAG, "We are offline.");
-        }else{
+        } else {
             Log.d(TAG, "We are connected again. Let's send data to the server.");
             // do something()
 

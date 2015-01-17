@@ -51,12 +51,10 @@ import java.util.concurrent.Executors;
  */
 public class SerialConsoleActivity extends Activity {
 
-    private final String TAG = SerialConsoleActivity.class.getSimpleName();
-
     /**
      * Driver instance, passed in statically via
      * {@link #show(android.content.Context, com.hoho.android.usbserial.driver.UsbSerialPort)}.
-     *
+     * <p/>
      * <p/>
      * This is a devious hack; it'd be cleaner to re-create the driver using
      * arguments passed in with the {@link #startActivity(android.content.Intent)} intent. We
@@ -64,36 +62,46 @@ public class SerialConsoleActivity extends Activity {
      * process, and this is a simple demo.
      */
     private static UsbSerialPort sPort = null;
+    private final String TAG = SerialConsoleActivity.class.getSimpleName();
+    private final SerialInputOutputManager.Listener mListener =
+            new SerialInputOutputManager.Listener() {
 
+                @Override
+                public void onRunError(Exception e) {
+                    Log.d(TAG, "Runner stopped.");
+                }
+
+                @Override
+                public void onNewData(final byte[] data) {
+                    SerialConsoleActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            SerialConsoleActivity.this.updateReceivedData(data);
+                        }
+                    });
+                }
+            };
+    private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
     private TextView mTitleTextView;
     private TextView mDumpTextView;
     private ScrollView mScrollView;
     private CheckBox chkDTR;
     private CheckBox chkRTS;
     private Button btnMsg;
-
-    private final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
-
     private SerialInputOutputManager mSerialIoManager;
 
-    private final SerialInputOutputManager.Listener mListener =
-            new SerialInputOutputManager.Listener() {
-
-        @Override
-        public void onRunError(Exception e) {
-            Log.d(TAG, "Runner stopped.");
-        }
-
-        @Override
-        public void onNewData(final byte[] data) {
-            SerialConsoleActivity.this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    SerialConsoleActivity.this.updateReceivedData(data);
-                }
-            });
-        }
-    };
+    /**
+     * Starts the activity, using the supplied driver instance.
+     *
+     * @param context
+     * @param driver
+     */
+    static void show(Context context, UsbSerialPort port) {
+        sPort = port;
+        final Intent intent = new Intent(context, SerialConsoleActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        context.startActivity(intent);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -121,7 +129,8 @@ public class SerialConsoleActivity extends Activity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 try {
                     sPort.setDTR(isChecked);
-                }catch (IOException x){}
+                } catch (IOException x) {
+                }
             }
         });
 
@@ -130,12 +139,12 @@ public class SerialConsoleActivity extends Activity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 try {
                     sPort.setRTS(isChecked);
-                }catch (IOException x){}
+                } catch (IOException x) {
+                }
             }
         });
 
     }
-
 
     @Override
     protected void onPause() {
@@ -152,7 +161,7 @@ public class SerialConsoleActivity extends Activity {
         finish();
     }
 
-    void showStatus(TextView theTextView, String theLabel, boolean theValue){
+    void showStatus(TextView theTextView, String theLabel, boolean theValue) {
         String msg = theLabel + ": " + (theValue ? "enabled" : "disabled") + "\n";
         theTextView.append(msg);
     }
@@ -226,19 +235,6 @@ public class SerialConsoleActivity extends Activity {
                 + HexDump.dumpHexString(data) + "\n\n";
         mDumpTextView.append(message);
         mScrollView.smoothScrollTo(0, mDumpTextView.getBottom());
-    }
-
-    /**
-     * Starts the activity, using the supplied driver instance.
-     *
-     * @param context
-     * @param driver
-     */
-    static void show(Context context, UsbSerialPort port) {
-        sPort = port;
-        final Intent intent = new Intent(context, SerialConsoleActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-        context.startActivity(intent);
     }
 
 }

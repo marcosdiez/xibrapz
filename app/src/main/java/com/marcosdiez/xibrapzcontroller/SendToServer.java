@@ -11,9 +11,9 @@ import android.util.Log;
 public class SendToServer {
     private static final String TAG = "XB-SendToServer";
 
-    public synchronized void publishData(){
+    public synchronized void publishData() {
         SignalsDbHelper mSignalsDbHelper = new SignalsDbHelper();
-        SQLiteDatabase db = mSignalsDbHelper. getWritableDatabase();
+        SQLiteDatabase db = mSignalsDbHelper.getWritableDatabase();
 
         Cursor queryCursor = queryForNonPublishedItems(db);
         int numRows = queryCursor.getCount();
@@ -25,9 +25,8 @@ public class SendToServer {
 
     private void sendCursorDataToServer(SQLiteDatabase db, Cursor queryCursor, int numRows) {
         queryCursor.moveToFirst();
-        while (queryCursor.isAfterLast() == false)
-        {
-            if(Globals.offline){
+        while (queryCursor.isAfterLast() == false) {
+            if (Globals.offline) {
                 Log.d(TAG, "Aborting sending " + numRows + "rows to the server.");
                 return;
             }
@@ -38,7 +37,7 @@ public class SendToServer {
         Log.d(TAG, "The " + numRows + " were sucessfully sent to the server.");
     }
 
-    private void publish(Cursor queryCursor){
+    private void publish(Cursor queryCursor) {
         String output = generateServerUrl(queryCursor);
         Log.d(TAG, "ServerURL: [" + output + "]");
     }
@@ -71,14 +70,14 @@ public class SendToServer {
     }
 
     private Cursor queryForNonPublishedItems(SQLiteDatabase db) {
-        String[] db_FROM = { "id", "event_name", "event_value", "timestamp_event_received", "lat", "lng" };
+        String[] db_FROM = {"id", "event_name", "event_value", "timestamp_event_received", "lat", "lng"};
 
         String where = "sent_to_server=?";
-        String[] whereArgs = new String[] { "0" };
+        String[] whereArgs = new String[]{"0"};
 
         String sortOrder = "id ASC";
 
-        Cursor queryCursor =  db.query(SignalsDbHelper.SIGNALS_DATA_TABLE_NAME, db_FROM, where, whereArgs, null,null ,sortOrder);
+        Cursor queryCursor = db.query(SignalsDbHelper.SIGNALS_DATA_TABLE_NAME, db_FROM, where, whereArgs, null, null, sortOrder);
         return queryCursor;
     }
 }

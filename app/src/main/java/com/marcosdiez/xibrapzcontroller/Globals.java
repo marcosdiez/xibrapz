@@ -10,8 +10,8 @@ import android.os.Environment;
  * Created by Marcos Diez on 2015-01-17.
  */
 public class Globals {
-    private static Context context = null;
     public static boolean offline = false;
+    private static Context context = null;
 
     public static Context getContext() {
         if (context == null) {

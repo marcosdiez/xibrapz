@@ -56,16 +56,8 @@ import java.util.List;
  */
 public class DeviceListActivity extends Activity {
 
-    private final String TAG = DeviceListActivity.class.getSimpleName();
-
-    private UsbManager mUsbManager;
-    private ListView mListView;
-    private TextView mProgressBarTitle;
-    private ProgressBar mProgressBar;
-
     private static final int MESSAGE_REFRESH = 101;
     private static final long REFRESH_TIMEOUT_MILLIS = 5000;
-
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -81,7 +73,11 @@ public class DeviceListActivity extends Activity {
         }
 
     };
-
+    private final String TAG = DeviceListActivity.class.getSimpleName();
+    private UsbManager mUsbManager;
+    private ListView mListView;
+    private TextView mProgressBarTitle;
+    private ProgressBar mProgressBar;
     private List<UsbSerialPort> mEntries = new ArrayList<UsbSerialPort>();
     private ArrayAdapter<UsbSerialPort> mAdapter;
 
@@ -100,7 +96,7 @@ public class DeviceListActivity extends Activity {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 final TwoLineListItem row;
-                if (convertView == null){
+                if (convertView == null) {
                     final LayoutInflater inflater =
                             (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     row = (TwoLineListItem) inflater.inflate(android.R.layout.simple_list_item_2, null);
@@ -182,7 +178,7 @@ public class DeviceListActivity extends Activity {
                 mEntries.addAll(result);
                 mAdapter.notifyDataSetChanged();
                 mProgressBarTitle.setText(
-                        String.format("%s device(s) found",Integer.valueOf(mEntries.size())));
+                        String.format("%s device(s) found", Integer.valueOf(mEntries.size())));
                 hideProgressBar();
                 Log.d(TAG, "Done refreshing, " + mEntries.size() + " entries found.");
             }

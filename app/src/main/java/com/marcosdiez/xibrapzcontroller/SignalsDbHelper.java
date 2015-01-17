@@ -20,7 +20,6 @@ public class SignalsDbHelper extends SQLiteOpenHelper {
     public static final String SIGNALS_ROW_SENT_TO_SERVER = "sent_to_server";
 
 
-
     private static final String SIGNALS_DATA_TABLE_CREATE =
 
             "CREATE TABLE '" + SIGNALS_DATA_TABLE_NAME + "'" +
