@@ -10,19 +10,22 @@ import android.os.Environment;
  * Created by Marcos Diez on 2015-01-17.
  */
 public class Globals {
-    private static Context context=null;
+    private static Context context = null;
+    public static boolean offline = false;
 
-    public static void setContext(Context context){
-        Globals.context=context;
-    }
-    public static Context getContext(){
-        if(context == null){
+    public static Context getContext() {
+        if (context == null) {
             throw new NullPointerException("Context");
         }
         return context;
     }
-    public static boolean isContextNull(){
-        return context==null;
+
+    public static void setContext(Context context) {
+        Globals.context = context;
+    }
+
+    public static boolean isContextNull() {
+        return context == null;
     }
 
 
@@ -39,7 +42,7 @@ public class Globals {
 //    }
 
 
-    public static String getPublicWritableFolder(){
+    public static String getPublicWritableFolder() {
         return Environment.getExternalStorageDirectory() + "/Android/data/" +
                 Globals.getContext().getPackageName();
     }

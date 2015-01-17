@@ -19,23 +19,55 @@ import java.util.Locale;
  */
 public class GpsStuff implements LocationListener {
     private static final String TAG = "XB-GpsStuff";
+    ////////
+    private static final int TWO_MINUTES = 1000 * 60 * 2;
     private static GpsStuff myGpsStuff = null;
-
+    public double lat = 0;
+    public double lng = 0;
     LocationManager locationManager;
     Criteria theCriteria = new Criteria();
     String provider;
-
-    public double lat = 0;
-    public double lng = 0;
     boolean useGps = true;
 
+    private GpsStuff() {
+        locationManager = (LocationManager) Globals.getContext().getSystemService(Globals.getContext().LOCATION_SERVICE);
 
-    ////////
-    private static final int TWO_MINUTES = 1000 * 60 * 2;
+        theCriteria.setAccuracy(Criteria.ACCURACY_FINE);
+        theCriteria.setAltitudeRequired(false);
 
-    /** Determines whether one Location reading is better than the current Location fix
-     * @param location  The new Location that you want to evaluate
-     * @param currentBestLocation  The current Location fix, to which you want to compare the new one
+        provider = locationManager.getBestProvider(theCriteria, true);
+    }
+
+    public static String distanceAsPrettyString(double distance) {
+        if (distance < 1000) {
+            return Math.round(distance) + "m";
+        }
+        if (distance < 10000) {
+            return ((float) Math.round(distance / 100)) / 10.0 + "km";
+        }
+        return Math.round(distance / (1000)) + "km";
+    }
+
+    ///////
+
+    public static double distanceBetween(double lat1, double lng1, double lat2, double lng2) {
+        float result[] = {0};
+        Location.distanceBetween(lat1, lng1, lat2, lng2, result);
+        return result[0];
+    }
+
+    public static synchronized GpsStuff getMyGpsStuff() {
+        if (myGpsStuff == null) {
+            myGpsStuff = new GpsStuff();
+        }
+        return myGpsStuff;
+    }
+
+    /**
+     * Determines whether one Location reading is better than the current Location fix
+     *
+     * @param location            The new Location that you want to evaluate
+     * @param currentBestLocation The current Location fix, to which you want to compare the new one
      */
     protected boolean isBetterLocation(Location location, Location currentBestLocation) {
         if (currentBestLocation == null) {
@@ -79,7 +111,9 @@ public class GpsStuff implements LocationListener {
         return false;
     }
 
-    /** Checks whether two providers are the same */
+    /**
+     * Checks whether two providers are the same
+     */
     private boolean isSameProvider(String provider1, String provider2) {
         if (provider1 == null) {
             return provider2 == null;
@@ -87,23 +121,9 @@ public class GpsStuff implements LocationListener {
         return provider1.equals(provider2);
     }
 
-    ///////
-
-
-
     public String distanceFromHereStr(double toLat, double toLng) {
         double distance = distanceFromHere(toLat, toLng);
         return distanceAsPrettyString(distance);
-    }
-
-    public static String distanceAsPrettyString(double distance) {
-        if (distance < 1000) {
-            return Math.round(distance) + "m";
-        }
-        if (distance < 10000) {
-            return ((float) Math.round(distance / 100)) / 10.0 + "km";
-        }
-        return Math.round(distance / (1000)) + "km";
     }
 
     public void setLocationToGps() {
@@ -153,19 +173,10 @@ public class GpsStuff implements LocationListener {
         }
     }
 
-
     public double distanceFromHere(double toLat, double toLng) {
         refreshLocation();
         return distanceFromHereHelper(toLat, toLng);
     }
-
-
-    public static double distanceBetween(double lat1, double lng1, double lat2, double lng2) {
-        float result[] = {0};
-        Location.distanceBetween(lat1, lng1, lat2, lng2, result);
-        return result[0];
-    }
-
 
     double distanceFromHereHelper(double toLat, double toLng) {
         float result[] = {0};
@@ -174,29 +185,12 @@ public class GpsStuff implements LocationListener {
         return result[0];
     }
 
-    public static synchronized GpsStuff getMyGpsStuff() {
-        if (myGpsStuff == null) {
-            myGpsStuff = new GpsStuff();
-        }
-        return myGpsStuff;
-    }
-
-    private GpsStuff() {
-        locationManager = (LocationManager) Globals.getContext().getSystemService(Globals.getContext().LOCATION_SERVICE);
-
-        theCriteria.setAccuracy(Criteria.ACCURACY_FINE);
-        theCriteria.setAltitudeRequired(false);
-
-        provider = locationManager.getBestProvider(theCriteria, true);
-    }
-
-
     @Override
     public void onLocationChanged(Location loc) {
         if (useGps) {
             lat = loc.getLatitude();
             lng = loc.getLongitude();
-            Log.d(TAG, "New Location: Lat: "+ loc.getLatitude() + " Lng:" + loc.getLongitude());
+            Log.d(TAG, "New Location: Lat: " + loc.getLatitude() + " Lng:" + loc.getLongitude());
         }
     }
 

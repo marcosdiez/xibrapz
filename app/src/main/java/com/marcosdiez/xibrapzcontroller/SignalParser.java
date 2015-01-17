@@ -9,9 +9,11 @@ import android.util.Log;
  */
 public class SignalParser {
     private static final String TAG = "XB-SignalParser";
-    public void parse(String msg){
+
+    public void parse(String msg) {
 
     }
+
     public void insertEvent(String theEventName, String eventValue) {
         long unixTime = System.currentTimeMillis() / 1000L;
         double lat = GpsStuff.getMyGpsStuff().lat;
@@ -24,18 +26,18 @@ public class SignalParser {
         values.put("lat", lat);
         values.put("lng", lng);
 
-        Log.d(TAG, "event_name=[" + theEventName + "] event_value=[" +eventValue + "] lat=[" + lat + "] lng=[" + lng + "]" );
+        Log.d(TAG, "event_name=[" + theEventName + "] event_value=[" + eventValue + "] lat=[" + lat + "] lng=[" + lng + "]");
         saveEvent(values);
     }
 
     private void saveEvent(ContentValues values) {
-        Log.d(TAG,"saveEvent");
+        Log.d(TAG, "saveEvent");
         SignalsDbHelper mSignalsDbHelper = new SignalsDbHelper();
         SQLiteDatabase db = mSignalsDbHelper.getWritableDatabase();
         db.insert(SignalsDbHelper.SIGNALS_DATA_TABLE_NAME,
                 null,
                 values
-                );
+        );
         db.close();
     }
 
