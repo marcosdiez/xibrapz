@@ -1,17 +1,35 @@
 package com.marcosdiez.xibrapzcontroller;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
 public class MainActivity extends ActionBarActivity {
-
+    private static final String TAG = "XB-MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Globals.setContext(this);
+
+        Log.d(TAG, "INIT");
+
+        GpsStuff.getMyGpsStuff().refreshLocation();
+
+        SignalParser x = new SignalParser();
+        x.insertEvent("marcos", "diez");
+
+        x.insertEvent("marcos2", "diez2");
+
+        x.insertEvent("marcos", "diez");
+
+        x.insertEvent("marcos3", "diez3");
+        x.insertEvent("marcos", "diez");
+        Log.d(TAG, "DONE");
     }
 
 
