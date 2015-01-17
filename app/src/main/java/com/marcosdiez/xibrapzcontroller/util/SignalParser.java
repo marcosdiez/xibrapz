@@ -1,8 +1,11 @@
-package com.marcosdiez.xibrapzcontroller;
+package com.marcosdiez.xibrapzcontroller.util;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
+import com.marcosdiez.xibrapzcontroller.db.DatabaseManager;
+import com.marcosdiez.xibrapzcontroller.db.SignalsDbHelper;
 
 /**
  * Created by Marcos on 17-Jan-15.
@@ -33,13 +36,12 @@ public class SignalParser {
 
     private void saveEvent(ContentValues values) {
         Log.d(TAG, "saveEvent");
-        SignalsDbHelper mSignalsDbHelper = new SignalsDbHelper();
-        SQLiteDatabase db = mSignalsDbHelper.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         db.insert(SignalsDbHelper.SIGNALS_DATA_TABLE_NAME,
                 null,
                 values
         );
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
     }
 
 }

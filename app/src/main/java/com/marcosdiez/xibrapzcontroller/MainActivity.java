@@ -1,10 +1,16 @@
 package com.marcosdiez.xibrapzcontroller;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.marcosdiez.xibrapzcontroller.android.DataPublishedBackgroundService;
+import com.marcosdiez.xibrapzcontroller.util.SignalParser;
+import com.marcosdiez.xibrapzcontroller.util.GpsStuff;
+import com.marcosdiez.xibrapzcontroller.util.SendToServer;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -33,6 +39,11 @@ public class MainActivity extends ActionBarActivity {
 
         SendToServer xx = new SendToServer();
         xx.publishData();
+        Log.d(TAG, "now the background service");
+
+        Intent intent = new Intent(this, DataPublishedBackgroundService.class);
+        startService(intent);
+
         Log.d(TAG, "Done");
     }
 

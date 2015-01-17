@@ -1,9 +1,14 @@
-package com.marcosdiez.xibrapzcontroller;
+package com.marcosdiez.xibrapzcontroller.util;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
+import com.marcosdiez.xibrapzcontroller.Globals;
+import com.marcosdiez.xibrapzcontroller.Settings;
+import com.marcosdiez.xibrapzcontroller.db.DatabaseManager;
+import com.marcosdiez.xibrapzcontroller.db.SignalsDbHelper;
 
 /**
  * Created by Marcos on 17-Jan-15.
@@ -12,15 +17,23 @@ public class SendToServer {
     private static final String TAG = "XB-SendToServer";
 
     public synchronized void publishData() {
-        SignalsDbHelper mSignalsDbHelper = new SignalsDbHelper();
-        SQLiteDatabase db = mSignalsDbHelper.getWritableDatabase();
-
+        if(!Globals.there_is_data_to_be_sent){
+            Log.d(TAG, "There is no data to be sent... bailing.");
+            return;
+        }
+        if (Globals.offline) {
+            Log.d(TAG, "We are offline. There is no reason to try to in publish data.");
+            return;
+        }
+        Log.d(TAG, "Starting to publish data to Server.");
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         Cursor queryCursor = queryForNonPublishedItems(db);
         int numRows = queryCursor.getCount();
         Log.d(TAG, "There are " + numRows + " rows to send to server");
         sendCursorDataToServer(db, queryCursor, numRows);
         queryCursor.close();
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
+        Log.d(TAG, "End of publishData()");
     }
 
     private void sendCursorDataToServer(SQLiteDatabase db, Cursor queryCursor, int numRows) {

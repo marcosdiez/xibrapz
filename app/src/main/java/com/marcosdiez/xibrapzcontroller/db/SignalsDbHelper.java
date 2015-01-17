@@ -1,8 +1,10 @@
-package com.marcosdiez.xibrapzcontroller;
+package com.marcosdiez.xibrapzcontroller.db;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.marcosdiez.xibrapzcontroller.Globals;
 
 /**
  * Created by Marcos on 12/19/13.
@@ -22,15 +24,15 @@ public class SignalsDbHelper extends SQLiteOpenHelper {
 
     private static final String SIGNALS_DATA_TABLE_CREATE =
 
-            "CREATE TABLE '" + SIGNALS_DATA_TABLE_NAME + "'" +
+            "CREATE TABLE '" + SIGNALS_DATA_TABLE_NAME + "' " +
                     "(" +
-                    "'" + SIGNALS_ROW_ID + "' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                    ",'" + SIGNALS_ROW_EVENT_NAME + "' TEXT NOT NULL" +
-                    ",'" + SIGNALS_ROW_EVENT_VALUE + "' TEXT NOT NULL" +
-                    ",'" + SIGNALS_ROW_TIMESTAMP_EVENT_RECEIVED + "' INTEGER NOT NULL default '0'" +
-                    ",'" + SIGNALS_ROW_LAT + "' REAL NOT NULL default '0'" +
-                    ",'" + SIGNALS_ROW_LNG + "' REAL NOT NULL default '0'" +
-                    "'," + SIGNALS_ROW_SENT_TO_SERVER + "' BOOLEAN NOT NULL default 0 CHECK (sent_to_server  IN (0,1) )" +
+                    " '" + SIGNALS_ROW_ID + "' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL " +
+                    ", '" + SIGNALS_ROW_EVENT_NAME + "' TEXT NOT NULL" +
+                    ", '" + SIGNALS_ROW_EVENT_VALUE + "' TEXT NOT NULL" +
+                    ", '" + SIGNALS_ROW_TIMESTAMP_EVENT_RECEIVED + "' INTEGER NOT NULL default '0'" +
+                    ", '" + SIGNALS_ROW_LAT + "' REAL NOT NULL default '0'" +
+                    ", '" + SIGNALS_ROW_LNG + "' REAL NOT NULL default '0'" +
+                    ", '" + SIGNALS_ROW_SENT_TO_SERVER + "' BOOLEAN NOT NULL default 0 CHECK (sent_to_server  IN (0,1) )" +
 //                    "',timestamp_sent_to_server' INTEGER NOT NULL default '0'" +
                     ");";
     private static final String TAG = "XB-SignalsDbHelper";
@@ -38,7 +40,7 @@ public class SignalsDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "signals.sqlite3";
 
 
-    SignalsDbHelper() {
+    public SignalsDbHelper() {
         super(Globals.getContext(), DATABASE_NAME, null, DATABASE_VERSION);
     }
 

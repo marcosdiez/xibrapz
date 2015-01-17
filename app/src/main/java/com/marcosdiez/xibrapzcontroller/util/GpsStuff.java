@@ -1,4 +1,4 @@
-package com.marcosdiez.xibrapzcontroller;
+package com.marcosdiez.xibrapzcontroller.util;
 
 
 import android.location.Address;
@@ -9,6 +9,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.marcosdiez.xibrapzcontroller.Globals;
 
 import java.io.IOException;
 import java.util.List;

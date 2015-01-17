@@ -1,10 +1,12 @@
-package com.marcosdiez.xibrapzcontroller;
+package com.marcosdiez.xibrapzcontroller.android;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.util.Log;
+
+import com.marcosdiez.xibrapzcontroller.Globals;
 
 /**
  * Created by Marcos on 17-Jan-15.
