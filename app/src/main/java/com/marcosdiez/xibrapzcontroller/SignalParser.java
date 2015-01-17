@@ -11,7 +11,7 @@ public class SignalParser {
     private static final String TAG = "XB-SignalParser";
 
     public void parse(String msg) {
-
+        Log.d(TAG, "SingalParse.parse [" + msg + "]: TODO");
     }
 
     public void insertEvent(String theEventName, String eventValue) {
@@ -20,11 +20,12 @@ public class SignalParser {
         double lng = GpsStuff.getMyGpsStuff().lng;
 
         ContentValues values = new ContentValues();
-        values.put("event_name", theEventName);
-        values.put("event_value", eventValue);
-        values.put("timestamp_event_received", unixTime);
-        values.put("lat", lat);
-        values.put("lng", lng);
+        values.put(SignalsDbHelper.SIGNALS_ROW_EVENT_NAME, theEventName);
+        values.put(SignalsDbHelper.SIGNALS_ROW_EVENT_VALUE, eventValue);
+        values.put(SignalsDbHelper.SIGNALS_ROW_TIMESTAMP_EVENT_RECEIVED, unixTime);
+        values.put(SignalsDbHelper.SIGNALS_ROW_LAT, lat);
+        values.put(SignalsDbHelper.SIGNALS_ROW_LNG, lng);
+        values.put(SignalsDbHelper.SIGNALS_ROW_SENT_TO_SERVER, false);
 
         Log.d(TAG, "event_name=[" + theEventName + "] event_value=[" + eventValue + "] lat=[" + lat + "] lng=[" + lng + "]");
         saveEvent(values);

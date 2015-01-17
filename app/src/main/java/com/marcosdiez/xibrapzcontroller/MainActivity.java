@@ -29,7 +29,11 @@ public class MainActivity extends ActionBarActivity {
 
         x.insertEvent("marcos3", "diez3");
         x.insertEvent("marcos", "diez");
-        Log.d(TAG, "DONE");
+        Log.d(TAG, "Data Created");
+
+        SendToServer xx = new SendToServer();
+        xx.publishData();
+        Log.d(TAG, "Done");
     }
 
 

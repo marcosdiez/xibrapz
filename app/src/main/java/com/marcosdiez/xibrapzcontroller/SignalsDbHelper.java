@@ -9,18 +9,30 @@ import android.util.Log;
  */
 public class SignalsDbHelper extends SQLiteOpenHelper {
     public static final String SIGNALS_DATA_TABLE_NAME = "SignalData";
+
+
+    public static final String SIGNALS_ROW_ID = "id";
+    public static final String SIGNALS_ROW_EVENT_NAME = "event_name";
+    public static final String SIGNALS_ROW_EVENT_VALUE = "event_value";
+    public static final String SIGNALS_ROW_TIMESTAMP_EVENT_RECEIVED = "timestamp_event_received";
+    public static final String SIGNALS_ROW_LAT = "lat";
+    public static final String SIGNALS_ROW_LNG = "lng";
+    public static final String SIGNALS_ROW_SENT_TO_SERVER = "sent_to_server";
+
+
+
     private static final String SIGNALS_DATA_TABLE_CREATE =
 
             "CREATE TABLE '" + SIGNALS_DATA_TABLE_NAME + "'" +
                     "(" +
-                    "'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                    "'event_name' TEXT NOT NULL," +
-                    "'event_value' TEXT NOT NULL," +
-                    "'timestamp_event_received' INTEGER NOT NULL default '0'," +
-                    "'lat' REAL NOT NULL default '0'," +
-                    "'lng' REAL NOT NULL default '0'," +
-                    "'sent_to_server' BOOLEAN NOT NULL default 0 CHECK (sent_to_server  IN (0,1) )," +
-                    "'timestamp_sent_to_server' INTEGER NOT NULL default '0'" +
+                    "'" + SIGNALS_ROW_ID + "' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                    ",'" + SIGNALS_ROW_EVENT_NAME + "' TEXT NOT NULL" +
+                    ",'" + SIGNALS_ROW_EVENT_VALUE + "' TEXT NOT NULL" +
+                    ",'" + SIGNALS_ROW_TIMESTAMP_EVENT_RECEIVED + "' INTEGER NOT NULL default '0'" +
+                    ",'" + SIGNALS_ROW_LAT + "' REAL NOT NULL default '0'" +
+                    ",'" + SIGNALS_ROW_LNG + "' REAL NOT NULL default '0'" +
+                    "'," + SIGNALS_ROW_SENT_TO_SERVER + "' BOOLEAN NOT NULL default 0 CHECK (sent_to_server  IN (0,1) )" +
+//                    "',timestamp_sent_to_server' INTEGER NOT NULL default '0'" +
                     ");";
     private static final String TAG = "XB-SignalsDbHelper";
     private static final int DATABASE_VERSION = 1;
